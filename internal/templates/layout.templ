@@ -1,0 +1,72 @@
+package templates
+
+import (
+"os"
+"todo-go/internal/middleware"
+)
+
+templ header(title string) {
+
+<head>
+	<title>{ title }</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="icon" type="image/x-icon" href="/static/imgs/logo.ico"/>
+	<script src="static/script/htmx.min.js"></script>
+	<script src="static/script/response-targets.js"></script>
+	if os.Getenv("env") == "prod" {
+	<link rel="stylesheet" href="static/css/style.min.css" />
+	} else {
+	<link rel="stylesheet" href="static/css/style.css" />
+	}
+</head>
+}
+
+templ footer() {
+<footer class="bg-primary-600 p-2">
+	<p class="text-center text-gray-200">
+		&copy; 2024 Todo App. All rights reserved.
+	</p>
+</footer>
+}
+
+templ nav() {
+<nav class="bg-primary-600 p-4">
+	<div class="container flex justify-between">
+		<ol class="flex space-x-4">
+			<li>
+				<img src="/static/imgs/logo.png" class="w-10 h-auto absolute left-6 top-2 hidden lg:flex " />
+			</li>
+			<li>
+				<a class="text-gray-200" href="/">Todo App</a>
+			</li>
+			if middleware.GetUser(ctx) != nil {
+			// <li>
+			// 	<a class="text-gray-200" href="/about">About</a>
+			// </li>
+			}
+		</ol>
+		<ol class="flex space-x-4">
+			if middleware.GetUser(ctx) != nil {
+			<li>
+				<button class="text-gray-200" hx-post="/logout">Logout</button>
+			</li>
+			}
+		</ol>
+	</div>
+</nav>
+}
+
+templ Layout(contents templ.Component, title string) {
+<html class="dark">
+@header(title)
+
+<body class="flex flex-col h-full">
+	@nav()
+	<main class="flex-1 bg-gray-50 dark:bg-gray-900 ">
+		@contents
+	</main>
+	@footer()
+</body>
+</html>
+}

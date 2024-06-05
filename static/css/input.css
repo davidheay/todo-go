@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .my-indicator-button .loader {
+    display: none;
+  }
+  .my-indicator-button .content {
+    display: inline;
+  }
+
+  .htmx-request.my-indicator-button .loader {
+    display: inline;
+  }
+  .htmx-request.my-indicator-button .content {
+    display: none;
+  }
+}
